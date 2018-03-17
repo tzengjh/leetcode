@@ -62,19 +62,13 @@ class Solution {
     public String tree2str(TreeNode t) {
     	if(t == null)
     		return "";
-    	StringBuilder sb = new StringBuilder();
-    	tree2str(sb, t);
-    	return sb.toString().replace("()()","").replace(")()", ")");
-    }
-    private void tree2str(StringBuilder sb, TreeNode t){
-    	if(t == null){
-    		return;
-    	}
-    	sb.append(t.val);
-    	sb.append("(");
-    	tree2str(sb, t.left);
-    	sb.append(")(");
-    	tree2str(sb, t.right);
-    	sb.append(")");
+    	else if(t.left == null && t.right == null)
+    		return t.val + "";
+    	else if(t.left == null)
+    		return t.val + "()(" + tree2str(t.right) + ")";
+    	else if(t.right == null)
+    		return t.val + "(" + tree2str(t.left) + ")";
+    	else
+    		return t.val + "(" + tree2str(t.left) + ")(" + tree2str(t.right) + ")";
     }
 }
