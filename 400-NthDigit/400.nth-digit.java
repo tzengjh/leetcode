@@ -44,17 +44,16 @@
 class Solution {
     public int findNthDigit(int n) {
     	if(n <= 0) return -1;
-    	if(n < 10) return n;
     	int k = 0;
     	int sum = 0;
     	do{
     		k++;
-    		sum += k*9*tens(k-1);
+    		sum += k*9*tens(k-1); // overflow when k==9
     	}while(sum < n);
-    	sum -= k*9*tens(k-1);
+    	sum -= k*9*tens(k-1); 
     	int num = tens(k - 1) + (n - sum - 1) / k;
     	int x = (n - sum - 1) % k;
-    	char c = String.valueOf(num).charAt(x);
+    	char c = Integer.toString(num).charAt(x);
     	return c - '0';
     }
 
