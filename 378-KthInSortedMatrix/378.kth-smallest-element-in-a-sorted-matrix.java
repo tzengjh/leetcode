@@ -11,54 +11,58 @@
  *
  * Given a n x n matrix where each of the rows and columns are sorted in
  * ascending order, find the kth smallest element in the matrix.
- * 
- * 
+ *
+ *
  * Note that it is the kth smallest element in the sorted order, not the kth
  * distinct element.
- * 
- * 
+ *
+ *
  * Example:
- * 
+ *
  * matrix = [
  * ⁠  [ 1,  5,  9],
  * ⁠  [10, 11, 13],
  * ⁠  [12, 13, 15]
  * ],
  * k = 8,
- * 
+ *
  * return 13.
- * 
- * 
- * 
- * Note: 
+ *
+ *
+ *
+ * Note:
  * You may assume k is always valid, 1 ≤ k ≤ n2.
  */
 class Solution {
-    public int kthSmallest(int[][] matrix, int k) {
-    	int m = matrix.length, n = matrix[0].length;
-        for(int i = m - 1; i >= 0; i--)
-        	for(int j = n - 1; j >= 0; j--){
-        		if((j + 1)*(i + 1) <= k){
-        			int rank = lessNum(matrix, j + 1, 0, n - 1, i - 1, matrix[i][j]) + (i + 1)*(j + 1) + lessNum(matrix, 0, i + 1, j - 1, m - 1, matrix[i][j]);
-        			if(rank == k)
-        				return matrix[i][j];
-        		}
-        	}
-        return 0;
+    private class Node implements Comparable<Node>{
+        int x;
+        int i;
+        int j;
+        Node(int x, int i, int j){
+            this.x = x;
+            this.i = i;
+            this.j = j;
+        }
+
+        public int compareTo(Node node){
+            return this.x - node.x;
+        }
     }
 
-    public int lessNum(int[][] matrix, int left, int top, int right, int bottom, int k){
-    	if(top > bottom || left > right)
-    		return 0;
-    	int sum = 0;
-    	int t = left;
-    	for(int i = bottom; i >= top; i--)
-    		for(int j = right; j >= t; j--)
-    			if(k > matrix[i][j]){
-    				sum += (i - bottom + 1) * (j - t + 1);
-    				t = j + 1;
-    				break;
-    			}
-    	return sum;
+
+    public int kthSmallest(int[][] matrix, int k) {
+        if(matrix == null || matrix.length == 0 || matrix[0] == null || matrix[0].length == 0 || k <= 0) throw new IllegalArgumentException();
+        int m = matrix.length, n = matrix[0].length;
+        PriorityQueue<Node> pq = new PriorityQueue<Node>();
+        for(int i = 0; i < n && i < k; i++)
+            pq.offer(new Node(matrix[0][i], 0, i));
+        Node node = null;
+        for(int i = 0; i < k && !pq.isEmpty(); i++){
+            node = pq.poll();
+            if(node.i + 1 < m){
+                pq.offer(new Node(matrix[node.i + 1][node.j], node.i + 1, node.j));
+            }
+        }
+        return node.x;
     }
 }
