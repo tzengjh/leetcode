@@ -39,6 +39,16 @@
  */
 class Solution {
     public List<String> wordBreak(String s, List<String> wordDict) {
-
+        List<String> list = new List<String>();
+        if(s == null || wordDict == null || wordDict.size() == 0) return list;
+        int N = s.length();
+        boolean[] isValid = new int[N+1];
+        isValid[0] = true;
+        for(int i = 1; i <= N; i++){
+            for(int j = 0; j < i; j++){
+                if(isValid[j] && wordDict.contains(s.substring(j,i))) isValid[i] = true;
+            }
+        }
+        return isValid[N];
     }
 }
