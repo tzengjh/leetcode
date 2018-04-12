@@ -38,17 +38,22 @@
  *
  */
 class Solution {
+    private final HashMap<String, List<String>> map = new HashMap<String, List<String>>();
     public List<String> wordBreak(String s, List<String> wordDict) {
-        List<String> list = new List<String>();
-        if(s == null || wordDict == null || wordDict.size() == 0) return list;
-        int N = s.length();
-        boolean[] isValid = new int[N+1];
-        isValid[0] = true;
-        for(int i = 1; i <= N; i++){
-            for(int j = 0; j < i; j++){
-                if(isValid[j] && wordDict.contains(s.substring(j,i))) isValid[i] = true;
+        List<String> list = new ArrayList<String>();
+        if(s == null || s.length() == 0 || wordDict == null || wordDict.size() == 0) return list;
+        if(map.containsKey(s)) return map.get(s);
+        if(wordDict.contains(s)) list.add(s);
+        for(int i = s.length(); i > 0; i--){
+            if(wordDict.contains(s.substring(0,i))){
+                List<String> rights = wordBreak(s.substring(i), wordDict);
+                for(String right: rights){
+                    list.add(s.substring(0,i) + " " + right);
+                }
             }
         }
-        return isValid[N];
+        map.put(s, list);
+        return list;
     }
+
 }

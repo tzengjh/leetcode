@@ -30,6 +30,7 @@
  * creating all test cases.
  */
 class Solution {
+    // use circle detection
     public int findDuplicate(int[] nums) {
         int i = 0, j = 0;
         do{
