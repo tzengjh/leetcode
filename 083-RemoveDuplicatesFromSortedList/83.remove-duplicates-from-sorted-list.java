@@ -37,14 +37,13 @@
 class Solution {
     public ListNode deleteDuplicates(ListNode head) {
         if(head == null) return head;
-        ListNode first = head, last = head.next;
-        while(last != null){
-            if(last.val == first.val){
-                first.next = last.next;
+        ListNode first = head;
+        while(first.next != null){
+            if(first.val == first.next.val){
+                first.next = first.next.next;
             }else{
                 first = first.next;
             }
-            last = last.next;
         }
         return head;
     }
